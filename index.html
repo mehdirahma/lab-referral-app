@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ارجاع آزمایشگاه | مطب</title>
+    <style>
+        body { font-family: Tahoma, sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); width: 100%; max-width: 400px; }
+        h2 { color: #333; text-align: center; margin-bottom: 25px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; color: #555; }
+        input[type="text"], input[type="tel"] { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        button { background-color: #007bff; color: white; padding: 14px 20px; border: none; border-radius: 6px; cursor: pointer; width: 100%; font-size: 16px; transition: background-color 0.3s; }
+        button:hover { background-color: #0056b3; }
+        #message { margin-top: 15px; text-align: center; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>ارسال ارجاع به آزمایشگاه 🧪</h2>
+        <form id="referralForm">
+            <label for="fullName">نام و نام خانوادگی بیمار:</label>
+            <input type="text" id="fullName" name="fullName" required>
+
+            <label for="mobile">شماره موبایل بیمار:</label>
+            <input type="tel" id="mobile" name="mobile" pattern="[0-9]{11}" placeholder="مثال: 09123456789" required>
+
+            <label for="referrerCode">کد/نام ارجاع دهنده:</label>
+            <input type="text" id="referrerCode" name="referrerCode" value="کد مطب شما" required>
+            
+            <button type="submit">ثبت ارجاع و ارسال نوتیف</button>
+        </form>
+        <div id="message"></div>
+    </div>
+
+    <script>
+        document.getElementById('referralForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const form = e.target;
+            const messageDiv = document.getElementById('message');
+            messageDiv.innerHTML = 'در حال ارسال...';
+            messageDiv.style.color = 'orange';
+
+            const data = {
+                fullName: form.fullName.value,
+                mobile: form.mobile.value,
+                referrerCode: form.referrerCode.value 
+            };
+
+            try {
+                // آدرس زیر باید آدرس واقعی Backend شما باشد
+                const response = await fetch('/api/referral', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    messageDiv.innerHTML = '✅ ارجاع با موفقیت ثبت و نوتیفیکیشن ارسال شد!';
+                    messageDiv.style.color = 'green';
+                    form.reset(); // پاک کردن فرم پس از ارسال موفق
+                } else {
+                    const error = await response.json();
+                    messageDiv.innerHTML = '❌ خطایی در ثبت رخ داد: ' + (error.message || 'نامشخص');
+                    messageDiv.style.color = 'red';
+                }
+            } catch (error) {
+                console.error('Fetch error:', error);
+                messageDiv.innerHTML = '❌ خطای ارتباطی. لطفاً دوباره تلاش کنید.';
+                messageDiv.style.color = 'red';
+            }
+        });
+    </script>
+</body>
+</html>
