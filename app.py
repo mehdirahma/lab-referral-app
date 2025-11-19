@@ -1,7 +1,3 @@
-
-
-
-    
 from flask import Flask, request, jsonify, render_template # render_template را اضافه کنید
 import requests
 import os
