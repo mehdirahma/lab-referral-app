@@ -8,8 +8,8 @@ app = Flask(__name__)
 # --- تنظیمات تلگرام (خوانده شده از متغیرهای محیطی Render) ---
 # توجه: os.environ.get باید نام متغیر را بخواند، نه مقدار آن را!
 # مطمئن شوید که Keyها در Render دقیقا همین نام‌ها هستند.
-TELEGRAM_BOT_TOKEN = os.environ.get("8230812940:AAElZIKFmg2ej0hB4Lbzg_AFJegMoYQq0CA") 
-TELEGRAM_CHAT_ID = os.environ.get("-1003469151523")
+TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN") 
+TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
 # ---------------------------------------------
 
 
